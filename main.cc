@@ -41,8 +41,7 @@ int MAXPAGES = 10*10;
 int IPPD = 1200;
 int ARRAYSIZE = (MAXPAGES * IPPD) + 10;
 
-char string[255], sdf_path[255], udt_file[255], opened = 0, gpsav =
-    0, ss_name[16], dashes[80];
+char string[255], sdf_path[255], udt_file[255], opened = 0, gpsav = 0, ss_name[16], dashes[80], scf_file[255];
 
 double earthradius, max_range = 0.0, forced_erp, dpp, ppd, yppd,
     fzone_clearance = 0.6, forced_freq, clutter, lat, lon, txh, tercon, terdic,
@@ -1212,6 +1211,30 @@ int main(int argc, char *argv[])
 			}
 		}
 
+        if (strcmp(argv[x], "-ant") == 0) {
+            z = x + 1;
+            
+            if( (az_filename = (char*) calloc(strlen(argv[z]) + strlen(AZ_FILE_SUFFIX) + 1, sizeof(char))) == NULL )
+                return ENOMEM;
+            strcpy(az_filename, argv[z]);
+            strcat(az_filename, AZ_FILE_SUFFIX);
+            if( (el_filename = (char*) calloc(strlen(argv[z]) + strlen(EL_FILE_SUFFIX) + 1, sizeof(char))) == NULL ){
+                free(az_filename);
+                return ENOMEM;
+            }
+            strcpy(el_filename, argv[z]);
+            strcat(el_filename, EL_FILE_SUFFIX);
+            if( (result = LoadPAT(az_filename,el_filename)) != 0 ){
+                fprintf(stderr,"Permissions error reading antenna pattern file\n");
+                free(az_filename);
+                free(el_filename);
+                exit(result);
+            }
+            free(az_filename);
+            free(el_filename);
+        }
+
+        
 		if (strcmp(argv[x], "-o") == 0) {
 			z = x + 1;
 
@@ -1221,7 +1244,7 @@ int main(int argc, char *argv[])
 				strncpy(tx_site[0].filename, argv[z], 253);
 				/* Antenna pattern files have the same basic name as the output file
 				 * but with a different extension. If they exist, load them now */
-				if( (az_filename = (char*) calloc(strlen(argv[z]) + strlen(AZ_FILE_SUFFIX) + 1, sizeof(char))) == NULL )
+				/*if( (az_filename = (char*) calloc(strlen(argv[z]) + strlen(AZ_FILE_SUFFIX) + 1, sizeof(char))) == NULL )
 					return ENOMEM;
 				strcpy(az_filename, argv[z]);
 				strcat(az_filename, AZ_FILE_SUFFIX);
@@ -1239,6 +1262,7 @@ int main(int argc, char *argv[])
 				}
 				free(az_filename);
 				free(el_filename);
+                 */
 			} else if (z <= y && argv[z][0] && argv[z][0] == '-' && argv[z][1] == '\0' ) {
 				/* Handle writing image data to stdout */
 				to_stdout = true;
@@ -1559,11 +1583,29 @@ int main(int argc, char *argv[])
 
 			if (z <= y && argv[z][0]) {
 				sscanf(argv[z], "%lf", &LR.rel);
-				sscanf(argv[z], "%lf", &LR.conf);
 				LR.rel=LR.rel/100;
-				LR.conf=LR.conf/100;
 			}
+            
 		}
+        // Confidence % for ITM model
+        if (strcmp(argv[x], "-conf") == 0) {
+            z = x + 1;
+            
+            if (z <= y && argv[z][0]) {
+                sscanf(argv[z], "%lf", &LR.conf);
+                LR.conf=LR.conf/100;
+            }
+            
+        }
+        // LossColors for the -scf
+        if (strcmp(argv[x], "-scf") == 0) {
+            z = x + 1;
+            
+            if (z <= y && argv[z][0]) {
+                sscanf(argv[z], "%lf", &scf_file);
+            }
+        }
+
 	}
 
 	/* ERROR DETECTION */

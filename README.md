@@ -62,8 +62,10 @@ Input:
      -terdic Terrain dielectric value 2-80 (optional)
      -tercon Terrain conductivity 0.01-0.0001 (optional)
      -cl Climate code 1-6 (optional)
-     -rel Reliability for ITM model 50 to 99 (optional)
+     -rel Reliability for ITM model 50 to 99 (default of 50%, optional)
+     -conf Confidence for ITM model 1 to 99 (default of 50%, optional)
      -resample Resample Lidar input to specified resolution in meters (optional)
+     -LossColors LCF file defining the loss colors
 Output:
      -dbm Plot Rxd signal power instead of field strength
      -rt Rx Threshold (dB / dBm / dBuV/m)
