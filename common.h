@@ -115,7 +115,7 @@ extern double cropLon;
 extern char string[];
 extern char sdf_path[];
 extern char gpsav;
-
+extern char scf_file[255];
 extern unsigned char got_elevation_pattern;
 extern unsigned char got_azimuth_pattern;
 extern unsigned char metric;

@@ -2,7 +2,7 @@
 #define _INPUTS_HH_
 
 #include "common.h"
-
+extern char scf_file[255];
 /* Resample input tiles to new resolution */
 int resample_data(int scaling_factor);
 int resize_data(int resolution);

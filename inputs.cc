@@ -1068,9 +1068,9 @@ int LoadSignalColors(struct site xmtr)
 	char filename[255], string[80], *pointer = NULL, *s = NULL;
 	FILE *fd = NULL;
 
-	for (x = 0; scf_file[x] != '.' && scf_file[x] != 0 && x < 250;
+	for (x = 0; xmtr.filename[x] != '.' && xmtr.filename[x] != 0 && x < 250;
 	     x++)
-		filename[x] = scf_file[x];
+		filename[x] = xmtr.filename[x];
 
 	filename[x] = '.';
 	filename[x + 1] = 's';
