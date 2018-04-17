@@ -57,3 +57,7 @@ tiles.o: tiles.cc tiles.hh common.h
 .PHONY: clean
 clean:
 	rm -f $(objects) signalserver signalserverHD signalserverLIDAR
+
+install:
+	gcp --target-directory=/usr/local/bin signalserver signalserverHD
+
